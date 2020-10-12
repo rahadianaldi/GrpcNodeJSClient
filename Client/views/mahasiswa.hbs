@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home Page - GrpcGreeterClient</title>
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+        integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
+        crossorigin="anonymous" />
+    <link rel="stylesheet" href="/css/site.css" />
+
+    <script src="/lib/jquery/dist/jquery.min.js"></script>
+    <script src="/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/site.js?v=4q1jwFhaPaZgr8WAUSrux6hAuh0XDg9kPS3xIVq36I0"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"
+        integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ=="
+        crossorigin="anonymous"></script>
+
+    <script src="https://www.emos.id/webmosly/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="https://www.emos.id/webmosly/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <link rel="stylesheet" href="https://www.emos.id/webmosly/plugins/datatables-bs4/css/dataTables.bootstrap4.css">
+    <style>
+        .loading-bar {
+            display: inline-block;
+            min-width: 4px;
+            min-height: 25px;
+            border-radius: 4px;
+            animation: loading 1s ease-in-out infinite;
+            margin-bottom: 25px;
+        }
+
+        .loading-bar:nth-child(1) {
+            background-color: #02f97c;
+            animation-delay: 0;
+        }
+
+        .loading-bar:nth-child(2) {
+            background-color: #02c562;
+            animation-delay: 0.09s;
+        }
+
+        .loading-bar:nth-child(3) {
+            background-color: #008c45;
+            animation-delay: .18s;
+        }
+
+        .loading-bar:nth-child(4) {
+            background-color: #02f97c;
+            animation-delay: .27s;
+        }
+
+        .loading-bar:nth-child(5) {
+            background-color: #02c562;
+            animation-delay: .36s;
+        }
+
+        .loading-bar:nth-child(6) {
+            background-color: #008c45;
+            animation-delay: .45s;
+        }
+
+        @keyframes loading {
+            0% {
+                transform: scale(1);
+            }
+
+            20% {
+                transform: scale(1, 2.2);
+            }
+
+            40% {
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand" href="/">GrpcGreeterClientNodeJS</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+
+            <section class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1>Data Mahasiswa</h1>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="content">
+                <div class="modal fade" id="modal-input">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Input Data</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div id="progbarinsert" style="display:none">
+                                    <div id="loadpageinsert" style="padding-top:10px;">
+                                        <div class="loading text-center">
+                                            <div class="loading-bar"></div>
+                                            <div class="loading-bar"></div>
+                                            <div class="loading-bar"></div>
+                                            <div class="loading-bar"></div>
+                                            <div class="loading-bar"></div>
+                                            <div class="loading-bar"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="forminsert" style="display:block">
+                                    <div class="form-group" style="display:none;">
+                                        <input id="txttipemodal" class="form-control" readonly />
+                                    </div>
+                                    <div class="form-group">
+                                        <label>NIM Mahasiswa</label>
+                                        <input type="text" id="inputtxtnim" placeholder="Nim Mahasiswa"
+                                            class="form-control" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Nama Mahasiswa</label>
+                                        <input type="text" id="inputtxtnama" placeholder="Nama Mahasiswa"
+                                            class="form-control" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Asal Mahasiswa</label>
+                                        <input type="text" id="inputtxtasal" placeholder="Asal Mahasiswa"
+                                            class="form-control" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Tanggal Lahir</label>
+                                        <input type="date" id="inputtxttgl" placeholder="Tanggal Lahir Mahasiswa"
+                                            class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" id="cancelinsert" class="btn btn-default fa-pull-left"
+                                    data-dismiss="modal">Close</button>
+                                <button type="button" id="insertbannerbtn" onclick="InsertData()"
+                                    class="btn btn-success">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="container-fluid">
+                    <div class="card">
+                        <div class="card-header bg-light">
+                            <h3 class="card-title">List Mahasiswa</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-12" style="padding-bottom:20px;">
+                                    <a data-tipe="I" class="btn openmodal btn-primary"
+                                        style="color:white; cursor:pointer;" title="Insert">Tambah Mahasiswa</a>
+                                </div>
+                            </div>
+                            <table id="tabledata" class="nowrap table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>NIM</th>
+                                        <th>Nama</th>
+                                        <th>Asal</th>
+                                        <th>Tanggal Lahir</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {{#each results}}
+                                    <tr>
+                                        <td>{{ nim }}</td>
+                                        <td>{{ nama }}</td>
+                                        <td>{{ asal }}</td>
+                                        <td>{{ datebirth }}</td>
+                                        <td style="text-align:center">
+                                    <div class="btn-group">
+                                        <a id="{{ nim }}" data-user="{{ nim }}" data-tipe="E" class="btn btn-success openedit" style="color:white; cursor:pointer;" title="Edit"><i class="far fa-edit"></i></a>
+                                        <a data-id="{{ nim }}" data-title="{{ nama }}" class="btn btn-danger DeletePromo" style="color:white; cursor:pointer;" title="Delete"><i class="far fa-trash-alt"></i></a>
+                                    </div>
+                                </td>
+                                    </tr>
+                                    {{else}}
+                                    <tr>
+                                        <td colspan="5" class="text-center">No data to display.</td>
+                                    </tr>
+                                    {{/each}}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <script>
+                $(function () {
+                    $('#tabledata').DataTable({
+                        "lengthMenu": [[5, 15, 25, 50, -1], [5, 15, 25, 50, "All"]],
+                        "responsive": true,
+                        "ordering": true
+                    });
+                });
+
+                function clearform() {
+                    document.getElementById("inputtxtnim").value = "";
+                    document.getElementById("inputtxtnama").value = "";
+                    document.getElementById("inputtxttgl").value = "";
+                    document.getElementById("inputtxtasal").value = "";
+                }
+
+                $(document).on("click", ".openmodal", function () {
+                    clearform();
+                    var myID = $(this).data('tipe');
+                    document.getElementById("txttipemodal").value = myID;
+                    $("#modal-input").modal({ backdrop: "static" });
+                });
+
+                $(document).on("click", ".openedit", function () {
+                    clearform();
+                    document.getElementById("insertbannerbtn").disabled = true;
+                    document.getElementById("progbarinsert").style.display = "block";
+                    document.getElementById("forminsert").style.display = "none";
+                    var tipe = $(this).data('tipe');
+                    var nim = $(this).data('user');
+                    document.getElementById("txttipemodal").value = tipe;
+                    var str = "nim=" + nim;
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/GetDetailMahasiswa?" + str,
+                        contentType: "application/json; charset=utf-8",
+                        success: function (response) {
+                            var d = response;
+                            console.log(d);
+                            document.getElementById("inputtxtnim").readOnly = true;
+                            document.getElementById("inputtxtnim").value = d["nim"];
+                            document.getElementById("inputtxtnama").value = d["nama"];
+                            document.getElementById("inputtxtasal").value = d["asal"];
+                            var tgl = moment(d["datebirth"], 'DD/MM/YY').format('YYYY-MM-DD');
+                            console.log(tgl);
+                            document.getElementById("inputtxttgl").value = tgl;
+
+                            document.getElementById("insertbannerbtn").disabled = false;
+                            document.getElementById("progbarinsert").style.display = "none";
+                            document.getElementById("forminsert").style.display = "block";
+                        },
+                        failure: function (response) {
+                            alert(response.d);
+                        }
+                    });
+                    $("#modal-input").modal({ backdrop: "static" });
+                });
+
+                $(document).on("click", ".DeletePromo", function () {
+                    var myID = $(this).data('id');
+                    var title = $(this).data('title');
+                    if (confirm("Apakah anda yakin ingin menghapus " + title + "?")) {
+                        var str = "nim=" + myID;
+                        $.ajax({
+                            type: "POST",
+                            url: "DeleteMahasiswa?" + str,
+                            contentType: "application/json; charset=utf-8",
+                            success: function (response) {
+                                var d = response;
+                                if (d.split("~")[0] == "1") {
+                                    alert(d.split("~")[1]);
+                                } else if (d.split("~")[0] == "0") {
+                                    alert(d.split("~")[1]);
+                                    location.reload();
+                                }
+                            },
+                            failure: function (response) {
+                                alert(response.d);
+                            }
+                        });
+                    }
+                });
+
+                function InsertData() {
+                    document.getElementById("insertbannerbtn").disabled = true;
+                    document.getElementById("progbarinsert").style.display = "block";
+                    document.getElementById("forminsert").style.display = "none";
+                    document.getElementById("cancelinsert").style.display = "none";
+
+                    var nim = document.getElementById("inputtxtnim").value;
+                    var nama = document.getElementById("inputtxtnama").value;
+                    var asal = document.getElementById("inputtxtasal").value;
+                    var tanggal = document.getElementById("inputtxttgl").value;
+                    tgl = moment(tanggal, 'YYYY-MM-DD').format('MM/DD/YY').toString();
+
+                    var param = {};
+                    param.nama = nama;
+                    param.nim = nim;
+                    param.asal = asal;
+                    param.datebirth = tgl;
+
+                    var t = document.getElementById("txttipemodal").value;
+                    var url = "";
+                    if (t == "I") {
+                        url = "InsertMahasiswa";
+                    }
+                    else if (t == "E") {
+                        url = "EditMahasiswa";
+                    }
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: JSON.stringify(param),
+                        contentType: "application/json; charset=utf-8",
+                        success: function (response) {
+                            var d = response;
+                            if (d.split("~")[0] == "1") {
+                                alert(d.split("~")[1]);
+                                document.getElementById("insertbannerbtn").disabled = false;
+                                document.getElementById("progbarinsert").style.display = "none";
+                                document.getElementById("forminsert").style.display = "block";
+                                document.getElementById("cancelinsert").style.display = "block";
+                            } else if (d.split("~")[0] == "0") {
+                                console.log(response);
+                                alert(d.split("~")[1]);
+                                location.reload();
+                            } else if (d.split("~")[0] == "2") {
+                                $("#modal-edit").modal("hide");
+                            }
+                        },
+                        failure: function (response) {
+                            alert(response.d);
+                        }
+                    });
+                }
+            </script>
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2020 - GrpcGreeterClient - <a href="/Home/Privacy">Privacy</a>
+        </div>
+    </footer>
+
+</body>
+
+</html>
